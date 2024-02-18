@@ -11,14 +11,19 @@
   },
   "dependencies": {
     "@mantine/core": "^7.5.3",
+    "@mantine/dates": "^7.5.3",
+    "@mantine/form": "^7.5.3",
     "@mantine/hooks": "^7.5.3",
     "@react-pdf/renderer": "^3.3.8",
+    "dayjs": "^1.11.10",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

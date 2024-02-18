@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     padding: 28,
     fontSize: 12,
     fontWeight: 400,
-    justifyContent:"space-between",
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 14,
@@ -55,98 +55,106 @@ const styles = StyleSheet.create({
 
     gap: 4,
   },
-  footer: {
-    
-  },
+  footer: {},
 });
 
-const PDFDocument = () => (
+interface InvoiceFormData {
+  myCompanyName: string;
+  myAddress: string;
+  myZipCode: string;
+  myProvince: string;
+  invoiceDate: string;
+  invoiceNumber: string;
+  clientCompanyName: string;
+  clientAddress: string;
+  clientZipCode: string;
+  clientProvince: string;
+  project: string;
+  phone: string;
+  email: string;
+  description: string;
+  amountBeforeTaxes: number;
+  TPSNumber: string;
+  TVQNumber: string;
+}
+
+const PDFDocument: React.FC<{ data: InvoiceFormData }> = ({ data }) => (
   <Document>
     <Page size="A4" style={styles.page}>
+      {/* Use data from props to dynamically set values */}
       <View style={styles.headers}>
-        <Text style={{ fontSize: 24 }}>Riad Mefti</Text>
+        <Text style={{ fontSize: 24 }}>{data.myCompanyName}</Text>
         <View style={styles.adress}>
-          {" "}
-          <Text>1234 Street Name</Text>
-          <Text>H1S-2W4</Text>
-          <Text>Qc Canada</Text>
+          <Text>{data.myAddress}</Text>
+          <Text>{data.myZipCode}</Text>
+          <Text>{data.myProvince}</Text>
         </View>
       </View>
+
       <View style={styles.dateNumberRow}>
-        <Text>Date: 30 septembre 2024</Text>
-        <Text>Facture # 12344512</Text>
+        <Text>Date: {data.invoiceDate}</Text>
+        <Text>Facture # {data.invoiceNumber}</Text>
       </View>
+
+      {/* Client information */}
       <View style={styles.CompagnyInfo}>
         <View>
-          {" "}
-          <Text style={{ fontSize: "16", marginBottom: 6 }}>
-            Nom entreprise
-          </Text>
+          <Text style={{ fontSize: 16 }}>{data.clientCompanyName}</Text>
           <View style={styles.adress}>
-            {" "}
-            <Text>1234 Street Name</Text>
-            <Text>H1S-2W4</Text>
-            <Text>Qc Canada</Text>
+            <Text>{data.clientAddress}</Text>
+            <Text>{data.clientZipCode}</Text>
+            <Text>{data.clientProvince}</Text>
           </View>
         </View>
-        <View
-          style={{
-            gap: 4,
-          }}
-        >
+
+        {/* Project, Phone, Email */}
+        <View style={{ gap: 4 }}>
           <View style={styles.info}>
-            <Text style={styles.title}>Project:</Text>
-            <Text>Creation d un site web</Text>
+            <Text>Project: {data.project}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.title}>Téléphone:</Text>
-            <Text>514-593-6036</Text>
+            <Text>Téléphone: {data.phone}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.title}>Email:</Text>
-            <Text>test@test.com</Text>
+            <Text>Email: {data.email}</Text>
           </View>
         </View>
       </View>
+
+      {/* Description and Amount */}
       <View style={styles.dateNumberRow}>
         <Text>Description</Text>
         <Text>Total</Text>
       </View>
       <View style={styles.CompagnyInfo}>
-        <Text style={{ maxWidth: "70%" }}>
-          Ceci est un description du produit acheté. Je veux pouvoir remapper
-          mon site pour qu'il soit magnifique. De ce fait je veux pouvoir etre
-          en mesure de manger plen de chocolat
-        </Text>
-        <Text>1000$</Text>
+        <Text>{data.description}</Text>
+        <Text>{`$${data.amountBeforeTaxes.toFixed(2)}`}</Text>
       </View>
+
+      {/* Taxes and Total */}
       <View style={styles.footer}>
+        {/* Subtotal, Taxes, and Total */}
         <View style={styles.sousTotal}>
           <Text>Subtotal</Text>
-          <Text>1000$</Text>
+          <Text>{`$${data.amountBeforeTaxes.toFixed(2)}`}</Text>
         </View>
+
+        {/* Dynamically calculate taxes based on subtotal */}
         <View style={styles.taxesBox}>
           <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text>TPS</Text>
-            <Text>5%</Text>
-            <Text>100,23$</Text>
+            <Text>TPS:</Text>
+            <Text>{`$${(data.amountBeforeTaxes * 0.05).toFixed(2)}`}</Text>
           </View>
           <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text>TVQ</Text>
-            <Text>9.975%</Text>
-            <Text>300,23$</Text>
+            <Text>TVQ :</Text>
+            <Text>{`$${(data.amountBeforeTaxes * 0.09975).toFixed(2)}`}</Text>
           </View>
         </View>
+
         <View
           style={{
             flexDirection: "row",
@@ -157,16 +165,20 @@ const PDFDocument = () => (
           }}
         >
           <Text>Total taxes incluese:</Text>
-          <Text style={{ fontSize: 16 }}>1400$</Text>
-        </View>{" "}
+          <Text>{`$${(
+            data.amountBeforeTaxes +
+            data.amountBeforeTaxes * 0.05 +
+            data.amountBeforeTaxes * 0.09975
+          ).toFixed(2)}`}</Text>
+        </View>
         <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
           }}
         >
-          <Text>TPS #1238123</Text>
-          <Text>TVQ #1238123</Text>
+          <Text>TPS#: {data.TPSNumber}</Text>
+          <Text>TVQ#: {data.TVQNumber}</Text>
         </View>
       </View>
     </Page>
